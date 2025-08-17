@@ -7,8 +7,10 @@ const SearchBox = ({ value, onFilter }) => {
       <p className={styles.label}>Find contacts by name</p>
       <input
         type="text"
+        className={styles.input}   
         value={value}
         onChange={(e) => onFilter(e.target.value)}
+        placeholder="Type name..."
       />
     </div>
   );
