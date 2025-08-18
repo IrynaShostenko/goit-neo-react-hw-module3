@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContactForm from "./components/ContactForm/ContactForm.jsx";
 import ContactList from "./components/ContactList/ContactList.jsx";
 import SearchBox from "./components/SearchBox/SearchBox.jsx";
 import "./App.css";
+
+const STORAGE_KEY = "phonebook_contacts";
 
 const initialContacts = [
   { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
@@ -12,8 +14,22 @@ const initialContacts = [
 ];
 
 const App = () => {
-  const [contacts, setContacts] = useState(initialContacts);
+  const [contacts, setContacts] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : initialContacts;
+    }
+    catch {
+      return initialContacts;
+    }
+  });
+
   const [filter, setFilter] = useState("");
+
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
+  }, [contacts]);
 
   const addContact = (newContact) => {
     if (contacts.some(c => c.name.toLowerCase() === newContact.name.toLowerCase())) {
